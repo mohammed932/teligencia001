@@ -1,8 +1,17 @@
 /*
- * Teligencia global styles entry point.
- * Order: tokens → ng-zorro overrides → typography → utilities.
+ * Teligencia global styles entry.
+ *
+ * Order is critical:
+ *   1. palette.css         — pilot100 color tokens (light + dark)
+ *   2. typography.css      — pilot100 font system (Plus Jakarta + Playfair + JetBrains Mono)
+ *   3. tokens.scss         — Teligencia legacy aliases + spacing/radius/motion/layout/status
+ *   4. ng-zorro-theme.scss — ng-zorro overrides consuming the tokens above
+ *   5. typography.scss     — Teligencia legacy type classes (.t-display, .t-h1, etc.)
+ *   6. base resets + utilities
  */
 
+@import './palette.css';
+@import './typography.css';
 @import './styles/tokens.scss';
 @import './styles/ng-zorro-theme.scss';
 @import './styles/typography.scss';
@@ -27,7 +36,7 @@ button {
 }
 
 :focus-visible {
-  outline: 2px solid var(--brand-cyan);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }

@@ -1,108 +1,96 @@
 /*
- * Typography scale — Teligencia Lab Portal
- * Inter only. Tabular numerals for any numeric content.
+ * Teligencia legacy typography aliases.
+ *
+ * Base typography (font families, fluid scale, weights, leadings) now comes
+ * from pilot100 system at /src/typography.css. This file maps the historical
+ * Teligencia class names (.t-display, .t-h1, .t-h2, .t-body, .t-small,
+ * .t-caption, .t-number-xl, .t-tabular) to the new scale + composes them
+ * from pilot100 vars.
  */
 
-html {
-  background: var(--bg-app);
-  color-scheme: light dark;
-}
-html, body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 14px;
-  line-height: 22px;
-  color: var(--text);
-  background: var(--bg-app);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'cv11', 'ss01';
+/* Body baseline — uses Plus Jakarta Sans from typography.css */
+body {
+  color: var(--text-primary);
+  background: var(--bg-base);
 }
 
-/* Headings inherit theme text color (overrides ng-zorro reset to rgba(0,0,0,.85)) */
-h1, h2, h3, h4, h5, h6 { color: var(--text); }
+/* Headings — ensure they pick up theme ink, not ng-zorro reset */
+h1, h2, h3, h4, h5, h6 { color: var(--text-primary); }
 
+/* ─── LEGACY TELIGENCIA TYPE CLASSES ──────────────────────────── */
 .t-display {
-  font-size: clamp(32px, 4.2vw, 60px);
-  line-height: 1.05;
-  font-weight: 500;
-  letter-spacing: -0.025em;
-  color: var(--text);
-  font-family: 'Fraunces', 'Times New Roman', Georgia, serif;
-  font-variation-settings: 'opsz' 96;
-}
-
-.t-serif {
-  font-family: 'Fraunces', Georgia, serif;
-  font-variation-settings: 'opsz' 96;
-}
-
-.t-mono {
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 56px);
+  line-height: var(--leading-tight);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-primary);
 }
 
 .t-h1 {
-  font-size: 24px;
-  line-height: 32px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-family: var(--font-sans);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-tight);
 }
 
 .t-h2 {
-  font-size: 18px;
-  line-height: 28px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-tight);
 }
 
 .t-number-xl {
-  font-size: 32px;
-  line-height: 40px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-family: var(--font-sans);
+  font-size: var(--text-3xl);
+  line-height: var(--leading-tight);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-tight);
   font-variant-numeric: tabular-nums;
 }
 
 .t-body {
-  font-size: 14px;
-  line-height: 22px;
-  font-weight: 400;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  font-weight: var(--font-normal);
 }
 
 .t-small {
-  font-size: 12px;
-  line-height: 18px;
-  font-weight: 500;
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  font-weight: var(--font-medium);
 }
 
 .t-caption {
+  font-family: var(--label-font);
   font-size: 11px;
-  line-height: 16px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  line-height: var(--leading-tight);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-tertiary);
 }
 
-.t-tabular {
+.t-tabular { font-variant-numeric: tabular-nums; }
+
+.t-serif { font-family: var(--font-display); }
+.t-mono  {
+  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
 }
 
-/* Element baselines */
-h1 { @extend .t-h1; margin: 0; }
-h2 { @extend .t-h2; margin: 0; }
-h3 { font-size: 16px; line-height: 24px; font-weight: 600; margin: 0; }
-p  { margin: 0; }
-
+/* ─── LINKS — scoped, never global hijack ─────────────────────── */
 a {
-  color: var(--brand-navy);
+  color: inherit;
   text-decoration: none;
   transition: color var(--motion-fast) var(--ease);
 }
-a:hover { color: var(--brand-cyan); }
 a:focus-visible {
-  outline: 2px solid var(--brand-cyan);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
@@ -110,6 +98,6 @@ a:focus-visible {
 button { font-family: inherit; }
 
 ::selection {
-  background: var(--brand-cyan);
-  color: var(--brand-navy);
+  background: var(--accent);
+  color: var(--text-on-accent);
 }

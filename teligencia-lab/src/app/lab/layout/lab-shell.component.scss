@@ -42,7 +42,12 @@
 
 .nav-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
 
-.nav-link {
+/*
+ * Specificity note: `.sidebar a.nav-link` (0,2,2) beats the global
+ * `:root[data-theme='dark'] a` (0,2,1) so nav text stays calm neutral
+ * in dark theme instead of hijacked cyan.
+ */
+.sidebar a.nav-link {
   display: flex;
   align-items: center;
   gap: var(--s-3);
@@ -56,15 +61,15 @@
               color      var(--motion-fast) var(--ease);
   position: relative;
 }
-.nav-link:hover {
+.sidebar a.nav-link:hover {
   background: var(--bg-sidebar-hover);
   color: var(--text-on-navy);
 }
-.nav-link.active {
+.sidebar a.nav-link.active {
   background: var(--bg-sidebar-active);
   color: var(--text-on-navy);
 }
-.nav-link.active::before {
+.sidebar a.nav-link.active::before {
   content: '';
   position: absolute;
   left: calc(-1 * var(--s-3));
@@ -86,7 +91,7 @@
   padding-top: var(--s-4);
   border-top: 1px solid var(--border-on-navy);
 }
-.portal-link {
+.sidebar a.portal-link {
   display: flex;
   align-items: center;
   gap: var(--s-3);
@@ -97,7 +102,7 @@
   text-decoration: none;
   transition: background var(--motion-fast) var(--ease);
 }
-.portal-link:hover { background: var(--bg-sidebar-hover); color: var(--text-on-navy); }
+.sidebar a.portal-link:hover { background: var(--bg-sidebar-hover); color: var(--text-on-navy); }
 .env {
   margin-top: var(--s-3);
   padding: 0 var(--s-3);

@@ -1,84 +1,78 @@
 /*
- * Design tokens — Teligencia Lab Portal
- * Constitution-locked brand: #0A2540 navy + #00D4FF cyan + Inter.
- * No hex outside this file. Components consume var(--token-name) only.
+ * Teligencia legacy token bridge.
  *
- * Theme strategy:
- *   - `:root`                        — light tokens (default)
- *   - `:root[data-theme='dark']`     — dark overrides
- * Brand navy + brand cyan never change. Surface + ink + semantic-bg flip.
+ * Base palette + typography now come from pilot100 system at
+ * /src/palette.css and /src/typography.css. This file maps the historical
+ * token names (--brand-navy, --bg-app, --text, --text-on-navy, etc.) to
+ * the new pilot100 variables, plus declares teligencia-specific extensions
+ * (status colors, severity, spacing, radius, shadows, motion, layout).
+ *
+ * No hex colors should be added here. Compose from palette tokens.
  */
 
 :root {
-  /* === BRAND (locked, both themes) === */
-  --brand-navy: #0A2540;
-  --brand-cyan: #00D4FF;
+  /* ─── BRAND ALIASES (legacy → pilot100) ───────────────────────── */
+  --brand-navy: var(--primary);
+  --brand-cyan: var(--accent);
 
-  /* === SURFACE === */
-  --bg-app:     #F7F9FC; /* Lab Mist */
-  --bg-surface: #FFFFFF; /* Bench White */
-  --bg-sidebar: #0A2540; /* Trust Navy */
-  --bg-sidebar-hover:  #0F2D4E;
-  --bg-sidebar-active: #133761;
-  --bg-subtle: #EEF2F7;
+  /* ─── SURFACE ALIASES ─────────────────────────────────────────── */
+  --bg-app:            var(--bg-base);
+  --bg-sidebar:        var(--primary);
+  --bg-sidebar-hover:  var(--primary-hover);
+  --bg-sidebar-active: var(--primary-active);
 
-  /* === INK === */
-  --text:           #1A1F2E;
-  --text-muted:     #5B6573;
-  --text-faint:     #8A93A2;
-  --text-on-navy:   #FFFFFF;
-  --text-on-navy-muted: #A7B3C4;
+  /* ─── INK ALIASES ─────────────────────────────────────────────── */
+  --text:               var(--text-primary);
+  /* faint = tertiary (not muted) so captions/IDs stay legible on dark surfaces */
+  --text-faint:         var(--text-tertiary);
+  --text-on-navy:       var(--text-on-primary);
+  --text-on-navy-muted: var(--neutral-300);
 
-  /* === BORDERS === */
-  --border:        #E5EAF0;
-  --border-strong: #CDD5DF;
-  --border-on-navy:#1F3A5E;
+  /* ─── BORDER ALIASES ──────────────────────────────────────────── */
+  --border:        var(--border-default);
+  --border-on-navy: var(--primary-active);
 
-  /* === SEMANTIC HUES === */
-  --success: #16A34A;
-  --warning: #D97706;
-  --danger:  #DC2626;
-  --critical:#B91C1C;
-  --info:    #2563EB;
-  --indigo:  #6B5BD2;
+  /* ─── SEMANTIC ALIASES ────────────────────────────────────────── */
+  --danger:   var(--error);
+  --critical: var(--error-600);
+  --indigo:   #6B5BD2;
 
-  /* === SEMANTIC BACKGROUNDS (light tints) === */
-  --success-bg: #E8F6EE;
-  --warning-bg: #FBF2E1;
-  --danger-bg:  #FCE7E7;
-  --critical-bg:#F8D7D7;
-  --info-bg:    #E5EEFD;
-  --indigo-bg:  #ECE9FB;
-  --cyan-bg:    #DFF9FF;
-  --cyan-deep:  #006A80;  /* legible text on cyan-bg */
-  --skeleton-shimmer: #DEE4EC;
-  --slate-bg:   #EEF1F5;
+  --success-bg:  var(--success-50);
+  --warning-bg:  var(--warning-50);
+  --danger-bg:   var(--error-50);
+  --critical-bg: var(--error-100);
+  --info-bg:     var(--info-50);
+  --indigo-bg:   rgba(107, 91, 210, 0.12);
+  --cyan-bg:     var(--accent-subtle);
+  --cyan-deep:   var(--accent-hover);
+  --skeleton-shimmer: var(--neutral-200);
+  --slate-bg:    var(--neutral-100);
 
-  /* === PROJECT STATUS COLORS === */
-  --status-new:                 #5B6573;
-  --status-quote-sent:          #6B5BD2;
-  --status-po-received:         #6B5BD2;
-  --status-intake-in-progress:  #D97706;
-  --status-contract-review:     #D97706;
-  --status-ready-for-testing:   #00D4FF;
-  --status-in-testing:          #2563EB;
-  --status-findings-review:     #2563EB;
-  --status-retest:              #D97706;
-  --status-report-draft:        #6B5BD2;
-  --status-under-review:        #6B5BD2;
-  --status-awaiting-signatory:  #D97706;
-  --status-issued:              #16A34A;
-  --status-closed:              #16A34A;
-  --status-archived:            #5B6573;
+  /* ─── PROJECT STATUS (composed from semantic tokens) ──────────── */
+  --status-new:                 var(--neutral-500);
+  --status-quote-sent:          var(--indigo);
+  --status-po-received:         var(--indigo);
+  --status-intake-in-progress:  var(--warning);
+  --status-contract-review:     var(--warning);
+  --status-ready-for-testing:   var(--accent);
+  --status-in-testing:          var(--info);
+  --status-findings-review:     var(--info);
+  --status-retest:              var(--warning);
+  --status-report-draft:        var(--indigo);
+  --status-under-review:        var(--indigo);
+  --status-awaiting-signatory:  var(--warning);
+  --status-issued:              var(--success);
+  --status-closed:              var(--success);
+  --status-archived:            var(--neutral-500);
 
-  /* === FINDING SEVERITY COLORS === */
-  --severity-critical:      #B91C1C;
-  --severity-high:          #DC2626;
-  --severity-medium:        #D97706;
-  --severity-low:           #2563EB;
-  --severity-informational: #5B6573;
+  /* ─── FINDING SEVERITY ────────────────────────────────────────── */
+  --severity-critical:      var(--error-600);
+  --severity-high:          var(--error);
+  --severity-medium:        var(--warning);
+  --severity-low:           var(--info);
+  --severity-informational: var(--neutral-500);
 
-  /* === SPACING (4-pt scale) === */
+  /* ─── SPACING (4-pt scale) ────────────────────────────────────── */
   --s-1: 4px;
   --s-2: 8px;
   --s-3: 12px;
@@ -88,77 +82,50 @@
   --s-7: 48px;
   --s-8: 64px;
 
-  /* === RADIUS === */
+  /* ─── RADIUS ──────────────────────────────────────────────────── */
   --radius-sm:   4px;
   --radius-md:   8px;
   --radius-lg:   12px;
   --radius-pill: 999px;
 
-  /* === SHADOWS (navy-tinted in light) === */
-  --shadow-sm: 0 1px 2px rgba(10, 37, 64, 0.06);
-  --shadow-md: 0 4px 12px rgba(10, 37, 64, 0.08);
-  --shadow-lg: 0 12px 32px rgba(10, 37, 64, 0.12);
-
-  /* === LAYOUT === */
+  /* ─── LAYOUT ──────────────────────────────────────────────────── */
   --layout-sidebar-width: 240px;
   --layout-topbar-height: 64px;
   --layout-max-width: 1440px;
   --layout-page-pad-x: 32px;
 
-  /* === MOTION === */
+  /* ─── MOTION ──────────────────────────────────────────────────── */
   --motion-fast:   150ms;
   --motion-normal: 240ms;
   --motion-slow:   400ms;
   --ease:          cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* === FOCUS === */
-  --focus-ring: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--brand-cyan);
-
-  color-scheme: light;
+  /* ─── FOCUS ───────────────────────────────────────────────────── */
+  --focus-ring: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--accent);
 }
 
-/* ============================================================
-   DARK THEME — overrides
-   ============================================================ */
+/* ─── DARK OVERRIDES for legacy aliases that don't auto-cascade ─── */
 :root[data-theme='dark'] {
-  --bg-app:     #060B16; /* deep navy black — strong base */
-  --bg-surface: #131F35; /* clearly lifted cards */
-  --bg-sidebar: #03070F; /* sidebar deeper than app */
-  --bg-sidebar-hover:  #0B1428;
-  --bg-sidebar-active: #15233F;
-  --bg-subtle: #1B294A;
+  /* Brighter ink on burgundy sidebar — neutral scale is inverted in dark,
+     so neutral-900 = #E8E4EC (near-white). Active/main nav = brightest. */
+  --text-on-navy:       var(--neutral-900);
+  --text-on-navy-muted: var(--neutral-800);
+  --border-on-navy:     var(--neutral-300);
 
-  --text:           #ECF1F8;
-  --text-muted:     #9AA7BC;
-  --text-faint:     #6E7B92;
-  --text-on-navy:   #FFFFFF;
-  --text-on-navy-muted: #9AA7BC;
+  --text-faint:         var(--text-tertiary);
 
-  --border:        #2A3855;
-  --border-strong: #3B4C70;
-  --border-on-navy:#2A3855;
-
-  /* Semantic hues stay the same; backgrounds shift to translucent tints */
-  --success-bg: rgba(22, 163, 74, 0.22);
-  --warning-bg: rgba(217, 119, 6, 0.24);
-  --danger-bg:  rgba(220, 38, 38, 0.22);
-  --critical-bg:rgba(185, 28, 28, 0.28);
-  --info-bg:    rgba(37, 99, 235, 0.24);
-  --indigo-bg:  rgba(107, 91, 210, 0.26);
-  --cyan-bg:    rgba(0, 212, 255, 0.16);
-  --cyan-deep:  #6CE9FF;
-  --skeleton-shimmer: #2A3855;
-  --slate-bg:   rgba(154, 167, 188, 0.18);
-
-  /* Subtle cyan-tinted shadows lift cards visually in dark */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 212, 255, 0.03);
-  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.6),  0 0 0 1px rgba(0, 212, 255, 0.05);
-  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.7),  0 0 0 1px rgba(0, 212, 255, 0.06);
-
-  color-scheme: dark;
+  --success-bg:  var(--success-100);
+  --warning-bg:  var(--warning-100);
+  --danger-bg:   var(--error-100);
+  --critical-bg: var(--error-200);
+  --info-bg:     var(--info-100);
+  --indigo-bg:   rgba(107, 91, 210, 0.22);
+  --cyan-bg:     var(--accent-subtle);
+  --skeleton-shimmer: var(--neutral-200);
+  --slate-bg:    rgba(154, 167, 188, 0.14);
 }
 
-/* Smooth theme switch (skip if user opts out of motion) */
+/* Smooth theme switch */
 html, body, .ant-card, .ant-input, .ant-input-affix-wrapper,
 .ant-select-selector, .ant-btn, .ant-table-thead > tr > th,
 .ant-table-tbody > tr > td, .ant-dropdown-menu {
