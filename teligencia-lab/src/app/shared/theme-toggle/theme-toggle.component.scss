@@ -1,0 +1,53 @@
+:host { display: inline-flex; }
+
+.seg {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--bg-app);
+  padding: 3px;
+  display: inline-flex;
+  gap: 2px;
+  margin: 0;
+}
+
+.seg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font: inherit;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--ease),
+              color      var(--motion-fast) var(--ease);
+}
+.seg-btn:hover {
+  color: var(--text);
+}
+.seg-btn.active {
+  background: var(--bg-surface);
+  color: var(--brand-navy);
+  box-shadow: var(--shadow-sm);
+}
+.seg-btn:focus-visible {
+  outline: 2px solid var(--brand-cyan);
+  outline-offset: 2px;
+}
+
+.seg.compact .seg-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+.seg-label { font-weight: 500; }
+
+.ico { display: block; flex-shrink: 0; }
+
+/* Dark mode: active chip uses cyan accent to stand out on dark surface */
+:host-context(:root[data-theme='dark']) .seg-btn.active {
+  color: var(--brand-cyan);
+}

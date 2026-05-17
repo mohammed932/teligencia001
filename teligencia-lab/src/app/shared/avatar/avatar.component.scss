@@ -1,0 +1,20 @@
+:host { display: inline-block; }
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--avatar-bg, var(--brand-navy));
+  color: var(--text-on-navy);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  user-select: none;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+.avatar.md { width: 32px; height: 32px; font-size: 12px; }
+.avatar.lg { width: 40px; height: 40px; font-size: 14px; }

@@ -1,0 +1,19 @@
+:host { display: inline-block; }
+
+.sla {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 4px var(--s-3);
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  background: var(--bg-subtle);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.sla[data-tone='danger']  { background: var(--danger-bg);  color: var(--danger);  border-color: rgba(220,38,38,0.2); }
+.sla[data-tone='warning'] { background: var(--warning-bg); color: var(--warning); border-color: rgba(217,119,6,0.2); }
+.sla[data-tone='info']    { background: var(--info-bg);    color: var(--info);    border-color: rgba(37,99,235,0.2); }

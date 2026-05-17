@@ -1,0 +1,98 @@
+/*
+ * Typography scale — Teligencia Lab Portal
+ * Inter only. Tabular numerals for any numeric content.
+ */
+
+html {
+  background: var(--bg-app);
+  color-scheme: light dark;
+}
+html, body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--text);
+  background: var(--bg-app);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11', 'ss01';
+}
+
+.t-display {
+  font-size: clamp(28px, 2.6vw, 36px);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.t-h1 {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.t-h2 {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.t-number-xl {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.t-body {
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+}
+
+.t-small {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+}
+
+.t-caption {
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.t-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Element baselines */
+h1 { @extend .t-h1; margin: 0; }
+h2 { @extend .t-h2; margin: 0; }
+h3 { font-size: 16px; line-height: 24px; font-weight: 600; margin: 0; }
+p  { margin: 0; }
+
+a {
+  color: var(--brand-navy);
+  text-decoration: none;
+  transition: color var(--motion-fast) var(--ease);
+}
+a:hover { color: var(--brand-cyan); }
+a:focus-visible {
+  outline: 2px solid var(--brand-cyan);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+button { font-family: inherit; }
+
+::selection {
+  background: var(--brand-cyan);
+  color: var(--brand-navy);
+}

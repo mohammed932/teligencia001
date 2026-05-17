@@ -1,0 +1,21 @@
+:host { display: inline-block; }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--s-2);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.pill[data-fs='OPEN']      { background: var(--info-bg);    color: var(--info);    border-color: rgba(37, 99, 235, 0.2); }
+.pill[data-fs='IN_REVIEW'] { background: var(--warning-bg); color: var(--warning); border-color: rgba(217, 119, 6, 0.2); }
+.pill[data-fs='ACCEPTED']  { background: var(--success-bg); color: var(--success); border-color: rgba(22, 163, 74, 0.2); }
+.pill[data-fs='REJECTED']  { background: var(--slate-bg);   color: var(--text-muted); }
+.pill[data-fs='RETESTED']  { background: var(--cyan-bg);    color: var(--cyan-deep); border-color: rgba(0, 212, 255, 0.3); }

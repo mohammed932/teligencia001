@@ -1,0 +1,66 @@
+:host { display: inline-block; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  transition: background var(--motion-fast) var(--ease);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--status-new);
+  flex-shrink: 0;
+}
+
+/* Map status -> dot + tint */
+.badge[data-status='NEW']                 { background: var(--slate-bg); }
+.badge[data-status='NEW']                 .dot { background: var(--status-new); }
+
+.badge[data-status='QUOTE_SENT'],
+.badge[data-status='PO_RECEIVED']         { background: var(--indigo-bg); color: var(--indigo); }
+.badge[data-status='QUOTE_SENT']          .dot,
+.badge[data-status='PO_RECEIVED']         .dot { background: var(--indigo); }
+
+.badge[data-status='INTAKE_IN_PROGRESS'],
+.badge[data-status='CONTRACT_REVIEW'],
+.badge[data-status='RETEST'],
+.badge[data-status='AWAITING_SIGNATORY']  { background: var(--warning-bg); color: var(--warning); }
+.badge[data-status='INTAKE_IN_PROGRESS']  .dot,
+.badge[data-status='CONTRACT_REVIEW']     .dot,
+.badge[data-status='RETEST']              .dot,
+.badge[data-status='AWAITING_SIGNATORY']  .dot { background: var(--warning); }
+
+.badge[data-status='READY_FOR_TESTING']   { background: var(--cyan-bg); color: var(--cyan-deep); }
+.badge[data-status='READY_FOR_TESTING']   .dot { background: var(--brand-cyan); }
+
+.badge[data-status='IN_TESTING'],
+.badge[data-status='FINDINGS_REVIEW']     { background: var(--info-bg); color: var(--info); }
+.badge[data-status='IN_TESTING']          .dot,
+.badge[data-status='FINDINGS_REVIEW']     .dot { background: var(--info); }
+
+.badge[data-status='REPORT_DRAFT'],
+.badge[data-status='UNDER_REVIEW']        { background: var(--indigo-bg); color: var(--indigo); }
+.badge[data-status='REPORT_DRAFT']        .dot,
+.badge[data-status='UNDER_REVIEW']        .dot { background: var(--indigo); }
+
+.badge[data-status='ISSUED'],
+.badge[data-status='CLOSED']              { background: var(--success-bg); color: var(--success); }
+.badge[data-status='ISSUED']              .dot,
+.badge[data-status='CLOSED']              .dot { background: var(--success); }
+
+.badge[data-status='ARCHIVED']            { background: var(--slate-bg); color: var(--text-muted); }
+.badge[data-status='ARCHIVED']            .dot { background: var(--text-muted); }

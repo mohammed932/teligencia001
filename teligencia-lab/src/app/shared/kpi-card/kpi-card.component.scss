@@ -1,0 +1,70 @@
+:host { display: block; }
+
+.kpi {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--s-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  min-height: 132px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--motion-fast) var(--ease),
+              transform   var(--motion-fast) var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+.kpi::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  height: 3px;
+  width: 40px;
+  background: var(--brand-cyan);
+  border-radius: 0 0 var(--radius-sm) 0;
+  opacity: 0.85;
+}
+.kpi:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.kpi-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.kpi-icon {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  color: var(--brand-navy);
+  font-size: 16px;
+}
+
+.kpi-value {
+  color: var(--text);
+  font-feature-settings: 'tnum';
+}
+
+.kpi[data-tone='danger']  .kpi-value { color: var(--danger); }
+.kpi[data-tone='success'] .kpi-value { color: var(--success); }
+
+.kpi-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.kpi-delta[data-dir='up']   { color: var(--success); }
+.kpi-delta[data-dir='down'] { color: var(--danger); }
+.delta-icon { font-size: 12px; }

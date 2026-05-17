@@ -1,0 +1,40 @@
+:host { display: block; }
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--s-6) var(--s-5);
+  gap: var(--s-3);
+}
+
+.art {
+  width: 120px;
+  height: 120px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title { color: var(--text); }
+.body  { color: var(--text-muted); max-width: 38ch; }
+
+/* Illustration palette — wired to tokens, never raw hex. */
+.illu { stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+
+.illu .stroke-navy { stroke: var(--brand-navy); fill: none; }
+.illu .stroke-018  { stroke-opacity: 0.18; }
+.illu .stroke-025  { stroke-opacity: 0.25; }
+.illu .stroke-030  { stroke-opacity: 0.30; }
+
+.illu .fill-navy    { fill: var(--brand-navy); }
+.illu .fill-cyan    { fill: var(--brand-cyan); }
+.illu .fill-cyanbg  { fill: var(--cyan-bg); stroke: var(--brand-navy); }
+.illu .fill-surface { fill: var(--bg-surface); stroke: var(--brand-navy); }
+
+.illu .path-check {
+  fill: none;
+  stroke: var(--brand-cyan);
+  stroke-width: 4;
+}

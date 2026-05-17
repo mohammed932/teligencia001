@@ -1,0 +1,48 @@
+:host { display: inline-block; }
+
+.sev {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 3px var(--s-3) 3px var(--s-2);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--bg-subtle);
+  color: var(--text);
+  border: 1px solid var(--border);
+  transition: background var(--motion-fast) var(--ease);
+}
+
+.bar {
+  width: 3px;
+  height: 14px;
+  border-radius: 1px;
+  background: var(--severity-informational);
+  flex-shrink: 0;
+}
+
+.sev.compact {
+  padding: 2px var(--s-2);
+  min-width: 28px;
+  justify-content: center;
+}
+.sev.compact .bar { display: none; }
+
+.sev[data-sev='CRITICAL']      { background: var(--critical-bg); color: var(--critical); border-color: rgba(185, 28, 28, 0.18); }
+.sev[data-sev='CRITICAL']  .bar { background: var(--critical); }
+
+.sev[data-sev='HIGH']          { background: var(--danger-bg);   color: var(--danger);   border-color: rgba(220, 38, 38, 0.18); }
+.sev[data-sev='HIGH']       .bar { background: var(--danger); }
+
+.sev[data-sev='MEDIUM']        { background: var(--warning-bg);  color: var(--warning);  border-color: rgba(217, 119, 6, 0.18); }
+.sev[data-sev='MEDIUM']     .bar { background: var(--warning); }
+
+.sev[data-sev='LOW']           { background: var(--info-bg);     color: var(--info);     border-color: rgba(37, 99, 235, 0.18); }
+.sev[data-sev='LOW']        .bar { background: var(--info); }
+
+.sev[data-sev='INFORMATIONAL'] { background: var(--slate-bg);    color: var(--text-muted); border-color: var(--border); }
+.sev[data-sev='INFORMATIONAL'] .bar { background: var(--severity-informational); }
