@@ -19,6 +19,27 @@ Requires Node 20.x. Tested with the local Angular CLI 17.0.7.
 
 ---
 
+## Sign-in (Feature 001 — Clerk + mandatory MFA)
+
+1. Create a Clerk dev instance and one staff user. Set `publicMetadata.role`
+   to one of: `lab_admin`, `pm`, `test_engineer`, `reviewer`, `signatory`,
+   `quality_manager`.
+2. Note your publishable key (`pk_test_…`).
+3. Edit `src/environments/environment.development.ts`:
+   ```ts
+   clerkPublishableKey: 'pk_test_<your-value>',
+   apiBaseUrl: 'http://localhost:3000/api/v1',
+   ```
+4. Make sure `teligencia-api` is running with matching Clerk config and the
+   `users` row for your account has been webhook-provisioned (see
+   `specs/001-staff-auth/quickstart.md`).
+5. `npm start`, visit `/lab/dashboard` — `authGuard` redirects to Clerk
+   hosted sign-in. Complete first factor + MFA to land on the dashboard.
+
+Sign-out: use the **Sign out** button in the sidebar foot.
+
+---
+
 ## What is in the box
 
 | Route | Purpose |

@@ -1,77 +1,20 @@
 /*
- * Teligencia legacy token bridge.
+ * Teligencia legacy token bridge (TL-UX-001 schema, graphite + sea-teal).
  *
- * Base palette + typography now come from pilot100 system at
- * /src/palette.css and /src/typography.css. This file maps the historical
- * token names (--brand-navy, --bg-app, --text, --text-on-navy, etc.) to
- * the new pilot100 variables, plus declares teligencia-specific extensions
- * (status colors, severity, spacing, radius, shadows, motion, layout).
+ * Base color tokens live in /src/palette.css (see TL-UX-001 §1.1).
+ * Base typography tokens live in /src/typography.css (see TL-UX-001 §1.2).
+ * This file declares Teligencia-specific extensions only:
+ *   - spacing scale
+ *   - radius scale
+ *   - motion tokens
+ *   - layout sizing
+ *   - focus ring
+ *   - shadows
  *
- * No hex colors should be added here. Compose from palette tokens.
+ * No hex colors are added here. Compose from palette tokens.
  */
 
 :root {
-  /* ─── BRAND ALIASES (legacy → pilot100) ───────────────────────── */
-  --brand-navy: var(--primary);
-  --brand-cyan: var(--accent);
-
-  /* ─── SURFACE ALIASES ─────────────────────────────────────────── */
-  --bg-app:            var(--bg-base);
-  --bg-sidebar:        var(--primary);
-  --bg-sidebar-hover:  var(--primary-hover);
-  --bg-sidebar-active: var(--primary-active);
-
-  /* ─── INK ALIASES ─────────────────────────────────────────────── */
-  --text:               var(--text-primary);
-  /* faint = tertiary (not muted) so captions/IDs stay legible on dark surfaces */
-  --text-faint:         var(--text-tertiary);
-  --text-on-navy:       var(--text-on-primary);
-  --text-on-navy-muted: var(--neutral-300);
-
-  /* ─── BORDER ALIASES ──────────────────────────────────────────── */
-  --border:        var(--border-default);
-  --border-on-navy: var(--primary-active);
-
-  /* ─── SEMANTIC ALIASES ────────────────────────────────────────── */
-  --danger:   var(--error);
-  --critical: var(--error-600);
-  --indigo:   #6B5BD2;
-
-  --success-bg:  var(--success-50);
-  --warning-bg:  var(--warning-50);
-  --danger-bg:   var(--error-50);
-  --critical-bg: var(--error-100);
-  --info-bg:     var(--info-50);
-  --indigo-bg:   rgba(107, 91, 210, 0.12);
-  --cyan-bg:     var(--accent-subtle);
-  --cyan-deep:   var(--accent-hover);
-  --skeleton-shimmer: var(--neutral-200);
-  --slate-bg:    var(--neutral-100);
-
-  /* ─── PROJECT STATUS (composed from semantic tokens) ──────────── */
-  --status-new:                 var(--neutral-500);
-  --status-quote-sent:          var(--indigo);
-  --status-po-received:         var(--indigo);
-  --status-intake-in-progress:  var(--warning);
-  --status-contract-review:     var(--warning);
-  --status-ready-for-testing:   var(--accent);
-  --status-in-testing:          var(--info);
-  --status-findings-review:     var(--info);
-  --status-retest:              var(--warning);
-  --status-report-draft:        var(--indigo);
-  --status-under-review:        var(--indigo);
-  --status-awaiting-signatory:  var(--warning);
-  --status-issued:              var(--success);
-  --status-closed:              var(--success);
-  --status-archived:            var(--neutral-500);
-
-  /* ─── FINDING SEVERITY ────────────────────────────────────────── */
-  --severity-critical:      var(--error-600);
-  --severity-high:          var(--error);
-  --severity-medium:        var(--warning);
-  --severity-low:           var(--info);
-  --severity-informational: var(--neutral-500);
-
   /* ─── SPACING (4-pt scale) ────────────────────────────────────── */
   --s-1: 4px;
   --s-2: 8px;
@@ -88,11 +31,12 @@
   --radius-lg:   12px;
   --radius-pill: 999px;
 
-  /* ─── LAYOUT ──────────────────────────────────────────────────── */
+  /* ─── LAYOUT (TL-UX-001 §1.3) ─────────────────────────────────── */
   --layout-sidebar-width: 240px;
-  --layout-topbar-height: 64px;
-  --layout-max-width: 1440px;
-  --layout-page-pad-x: 32px;
+  --layout-topbar-height: 56px;
+  --layout-drawer-width:  400px;
+  --layout-max-width:     1200px;
+  --layout-page-pad-x:    24px;
 
   /* ─── MOTION ──────────────────────────────────────────────────── */
   --motion-fast:   150ms;
@@ -101,31 +45,44 @@
   --ease:          cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ─── FOCUS ───────────────────────────────────────────────────── */
-  --focus-ring: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--accent);
+  --focus-ring: 0 0 0 2px var(--color-surface-2), 0 0 0 4px var(--color-brand-accent);
+
+  /* ─── SHADOWS (graphite-tinted in light, deep in dark) ────────── */
+  --shadow-sm: 0 1px 2px rgba(31, 41, 55, 0.06);
+  --shadow-md: 0 4px 12px rgba(31, 41, 55, 0.08);
+  --shadow-lg: 0 12px 32px rgba(31, 41, 55, 0.12);
+  --shadow-xl: 0 20px 50px rgba(31, 41, 55, 0.16);
+
+  /* ─── SEMANTIC BACKGROUNDS (light tints) ──────────────────────── */
+  --success-bg: rgba(5, 150, 105, 0.10);
+  --warning-bg: rgba(217, 119, 6, 0.10);
+  --danger-bg:  rgba(220, 38, 38, 0.10);
+  --critical-bg:rgba(220, 38, 38, 0.18);
+  --info-bg:    rgba(37, 99, 235, 0.10);
+  --indigo-bg:  rgba(99, 102, 241, 0.10);
+  --cyan-bg:    rgba(20, 184, 166, 0.10);
+  --cyan-deep:  var(--color-brand-accent-dark);
+  --skeleton-shimmer: var(--color-border);
+  --slate-bg:   rgba(107, 114, 128, 0.10);
 }
 
-/* ─── DARK OVERRIDES for legacy aliases that don't auto-cascade ─── */
+/* ─── DARK OVERRIDES ───────────────────────────────────────────── */
 :root[data-theme='dark'] {
-  /* Brighter ink on burgundy sidebar — neutral scale is inverted in dark,
-     so neutral-900 = #E8E4EC (near-white). Active/main nav = brightest. */
-  --text-on-navy:       var(--neutral-900);
-  --text-on-navy-muted: var(--neutral-800);
-  --border-on-navy:     var(--neutral-300);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.50);
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.60);
+  --shadow-xl: 0 28px 64px rgba(0, 0, 0, 0.70);
 
-  --text-faint:         var(--text-tertiary);
-
-  --success-bg:  var(--success-100);
-  --warning-bg:  var(--warning-100);
-  --danger-bg:   var(--error-100);
-  --critical-bg: var(--error-200);
-  --info-bg:     var(--info-100);
-  --indigo-bg:   rgba(107, 91, 210, 0.22);
-  --cyan-bg:     var(--accent-subtle);
-  --skeleton-shimmer: var(--neutral-200);
-  --slate-bg:    rgba(154, 167, 188, 0.14);
+  --success-bg: rgba(16, 185, 129, 0.16);
+  --warning-bg: rgba(245, 158, 11, 0.16);
+  --danger-bg:  rgba(248, 113, 113, 0.16);
+  --critical-bg:rgba(248, 113, 113, 0.24);
+  --info-bg:    rgba(96, 165, 250, 0.16);
+  --indigo-bg:  rgba(129, 140, 248, 0.16);
+  --cyan-bg:    rgba(45, 212, 191, 0.14);
 }
 
-/* Smooth theme switch */
+/* Smooth theme switch — kept */
 html, body, .ant-card, .ant-input, .ant-input-affix-wrapper,
 .ant-select-selector, .ant-btn, .ant-table-thead > tr > th,
 .ant-table-tbody > tr > td, .ant-dropdown-menu {

@@ -1,0 +1,13 @@
+-- Local dev seed — runs automatically on `supabase db reset` after migrations.
+--
+-- The Clerk organisation id is operator-supplied per dev instance, so this
+-- file deliberately leaves `clerk_org_id` NULL on the seeded `teligencia-lab`
+-- row. After running `supabase db reset`, run:
+--
+--   psql $SUPABASE_DB_URL -c "UPDATE organisations \
+--     SET clerk_org_id='<your-clerk-org_xxx>' WHERE slug='teligencia-lab';"
+--
+-- Feature 001 webhooks will reject (422 + AUTH_FAILED) until that mapping
+-- exists — that is the intentional operator pre-step (research D2).
+--
+-- Additional seed data for other feature areas can go below this line.

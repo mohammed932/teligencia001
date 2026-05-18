@@ -7,6 +7,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { MockSessionService } from '../../../core/services/mock-session.service';
+import { CurrentUserStore } from '../../../core/auth/current-user.store';
 import { GreetingStripComponent } from './sections/greeting-strip/greeting-strip.component';
 import { KpiStripComponent } from './sections/kpi-strip/kpi-strip.component';
 import { NeedsMyAttentionComponent } from './sections/needs-my-attention/needs-my-attention.component';
@@ -76,10 +77,15 @@ import { ActivityFeedComponent } from './sections/activity-feed/activity-feed.co
 })
 export class DashboardPage {
   protected readonly session = inject(MockSessionService);
+  private readonly currentUserStore = inject(CurrentUserStore);
+  /** Real authenticated user from /auth/me — co-exists with MockSession for now. */
+  protected readonly currentUser = this.currentUserStore.currentUser;
+
   private readonly _loading = signal<boolean>(true);
   readonly loading = computed(() => this._loading());
 
   constructor() {
+    void this.currentUserStore.ensureLoaded();
     setTimeout(() => this._loading.set(false), 600);
   }
 }

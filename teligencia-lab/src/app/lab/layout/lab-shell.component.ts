@@ -8,10 +8,15 @@
 
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { firstValueFrom } from 'rxjs';
 import { RoleSwitcherComponent } from '../../shared/role-switcher/role-switcher.component';
 import { ThemeToggleComponent } from '../../shared/theme-toggle/theme-toggle.component';
 import { MockSessionService } from '../../core/services/mock-session.service';
+import { AuthService } from '../../core/auth/auth.service';
+import { CurrentUserStore } from '../../core/auth/current-user.store';
+import { environment } from '../../../environments/environment';
 
 interface NavItem { readonly path: string; readonly label: string; readonly icon: string; }
 
@@ -64,6 +69,10 @@ interface NavItem { readonly path: string; readonly label: string; readonly icon
             <i nz-icon nzType="home" class="nav-icon" aria-hidden="true"></i>
             <span>Portal picker</span>
           </a>
+          <button class="portal-link sign-out-btn" type="button" (click)="signOut()" aria-label="Sign out">
+            <i nz-icon nzType="logout" class="nav-icon" aria-hidden="true"></i>
+            <span>Sign out</span>
+          </button>
           <p class="env">Demo · staging · eu-central-1</p>
         </div>
       </aside>
@@ -105,6 +114,26 @@ interface NavItem { readonly path: string; readonly label: string; readonly icon
 export class LabShellComponent {
   protected readonly session = inject(MockSessionService);
   protected readonly router = inject(Router);
+  private readonly auth = inject(AuthService);
+  private readonly currentUser = inject(CurrentUserStore);
+  private readonly http = inject(HttpClient);
+
+  async signOut(): Promise<void> {
+    /*
+     * Audit hook before Clerk revokes the session — once the token is
+     * gone the backend can't write SESSION_ENDED.
+     */
+    try {
+      await firstValueFrom(
+        this.http.post(`${environment.apiBaseUrl}/auth/sign-out`, {}),
+      );
+    } catch {
+      // Audit failure must not block the sign-out itself.
+    }
+    this.currentUser.clear();
+    await this.auth.signOut();
+    await this.router.navigateByUrl('/');
+  }
 
   readonly primaryNav: NavItem[] = [
     { path: '/lab/dashboard',          label: 'Dashboard',         icon: 'dashboard' },

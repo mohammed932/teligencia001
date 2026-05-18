@@ -1,0 +1,15 @@
+{
+  "workflow": "speckit",
+  "specName": "001-staff-auth",
+  "branch": "001-staff-auth",
+  "selectedAt": "2026-05-17T17:38:06.186Z",
+  "currentStep": "specify",
+  "status": "draft",
+  "stepHistory": {
+    "specify": {
+      "startedAt": "2026-05-17T17:38:06.330Z",
+      "completedAt": null
+    }
+  },
+  "transitions": []
+}

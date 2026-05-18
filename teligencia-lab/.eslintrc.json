@@ -1,0 +1,29 @@
+{
+  "root": true,
+  "ignorePatterns": ["projects/**/*", "dist/**", ".angular/**"],
+  "plugins": ["no-secrets"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parserOptions": {
+        "project": ["tsconfig.json"],
+        "createDefaultProgram": true
+      },
+      "extends": [],
+      "rules": {
+        "no-secrets/no-secrets": [
+          "error",
+          {
+            "tolerance": 4.2,
+            "ignoreContent": [
+              "pk_test_<replace>",
+              "pk_live_<replace-at-deploy>",
+              "<your-value>"
+            ],
+            "ignoreModules": true
+          }
+        ]
+      }
+    }
+  ]
+}

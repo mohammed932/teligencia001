@@ -1,0 +1,106 @@
+openapi: 3.1.0
+info:
+  title: Teligencia API — Auth — Current User
+  version: 0.1.0
+  description: |
+    Contract for `GET /auth/me` (Feature 001 — Staff Authentication & Authorization).
+    Auth required (ClerkAuthGuard). Returns the resolved user context for the
+    signed-in staff member so the Lab Portal can render the correct dashboard.
+servers:
+  - url: https://api.teligencia.local
+    description: Local dev
+paths:
+  /auth/me:
+    get:
+      operationId: getCurrentUser
+      summary: Return the signed-in staff user's identity, org, and role.
+      security:
+        - clerkBearer: []
+      responses:
+        '200':
+          description: User is authenticated, has a `users` row, and has a non-null role.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentUser'
+              examples:
+                pmExample:
+                  value:
+                    id: user_2abcDEFghijKLMnopQRstuVWxyz
+                    email: lea.hoffmann@teligencia.example
+                    fullName: Lea Hoffmann
+                    role: pm
+                    orgId: 5b1a4f17-2c0d-4f4e-8a3a-7d7a1b0c0d12
+        '401':
+          description: |
+            No / malformed / expired token. Generic error body (spec FR-016).
+            Spec Clarification 5 — no AUTH_FAILED audit entry for missing-token cases.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+              examples:
+                missingToken:
+                  value:
+                    error: unauthorized
+        '403':
+          description: |
+            Token valid but no `users` row exists (EC-001) OR `users.role IS NULL`
+            (EC-002). Generic error body. AUTH_FAILED audit entry written
+            (credentialed-but-rejected; Clarification 5).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+              examples:
+                notProvisioned:
+                  value:
+                    error: account_not_fully_provisioned
+components:
+  securitySchemes:
+    clerkBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Clerk-issued session token. Verified via cached JWKS — no synchronous
+        Clerk callout on hot path (research D1).
+  schemas:
+    CurrentUser:
+      type: object
+      required: [id, email, role, orgId]
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: Clerk user id (`user_xxx`); same value as `users.id`.
+          example: user_2abcDEFghijKLMnopQRstuVWxyz
+        email:
+          type: string
+          format: email
+          example: lea.hoffmann@teligencia.example
+        fullName:
+          type: string
+          nullable: true
+          example: Lea Hoffmann
+        role:
+          type: string
+          enum: [lab_admin, pm, test_engineer, reviewer, signatory, quality_manager]
+        orgId:
+          type: string
+          format: uuid
+          description: Internal organisation UUID (NOT Clerk's org id).
+          example: 5b1a4f17-2c0d-4f4e-8a3a-7d7a1b0c0d12
+    GenericError:
+      type: object
+      required: [error]
+      additionalProperties: false
+      description: |
+        All auth errors return a small generic envelope. Detail is logged
+        server-side; never returned to the client (spec FR-016, SC-008).
+      properties:
+        error:
+          type: string
+          enum:
+            - unauthorized
+            - account_not_fully_provisioned

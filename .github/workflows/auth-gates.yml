@@ -1,0 +1,82 @@
+# CI gate suite — runs the auth-critical tests on every PR that touches
+# either the API source tree or the Supabase migrations. The suite is the
+# minimum set that proves Feature 001's contract still holds.
+
+name: Auth Gates
+
+on:
+  pull_request:
+    paths:
+      - 'teligencia-api/**'
+      - 'supabase/migrations/**'
+      - '.github/workflows/auth-gates.yml'
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'teligencia-api/**'
+      - 'supabase/migrations/**'
+
+jobs:
+  auth-gates:
+    name: Run gate verification suite
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 54322:5432
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      SUPABASE_DB_URL: postgres://postgres:postgres@localhost:54322/postgres
+      SUPABASE_URL: http://localhost:54321
+      SUPABASE_SERVICE_ROLE_KEY: test-service-role-key
+      CLERK_PUBLISHABLE_KEY: pk_test_ci
+      CLERK_SECRET_KEY: sk_test_ci
+      CLERK_WEBHOOK_SIGNING_SECRET: whsec_ci_test_secret
+      CLERK_ISSUER: https://test.clerk.local
+      CLERK_JWKS_URL: https://test.clerk.local/.well-known/jwks.json
+      NODE_ENV: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: teligencia-api/package-lock.json
+
+      - name: Install API deps
+        working-directory: teligencia-api
+        run: npm ci
+
+      - name: Apply migrations
+        run: |
+          PSQL='psql postgres://postgres:postgres@localhost:54322/postgres'
+          for f in supabase/migrations/*.sql; do
+            echo "applying $f"
+            $PSQL -v ON_ERROR_STOP=1 -f "$f"
+          done
+
+      - name: Gate suite
+        working-directory: teligencia-api
+        run: |
+          npx jest --config ./test/jest-e2e.json \
+            test/audit/audit-immutability.e2e-spec.ts \
+            test/auth/tenant-isolation.e2e-spec.ts \
+            test/auth/unauth-blocked.e2e-spec.ts \
+            test/auth/roles.guard.e2e-spec.ts \
+            test/webhooks/webhook-idempotency.e2e-spec.ts \
+            test/webhooks/webhook-signature.e2e-spec.ts \
+            test/rls/users-rls.spec.ts

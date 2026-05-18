@@ -1,0 +1,117 @@
+openapi: 3.1.0
+info:
+  title: Teligencia API — Clerk Webhook
+  version: 0.1.0
+  description: |
+    Contract for `POST /webhooks/clerk` (Feature 001).
+    Unauthenticated by header; gated by svix signature verification.
+    Idempotent via `webhook_deliveries(svix_id PK)` ledger (research D4).
+servers:
+  - url: https://api.teligencia.local
+paths:
+  /webhooks/clerk:
+    post:
+      operationId: receiveClerkWebhook
+      summary: Receive a Clerk user lifecycle event.
+      description: |
+        Handled events:
+          - `user.created`   → upsert `users` row + USER_CREATED audit entry.
+          - `user.updated`   → update `users` row + USER_UPDATED audit entry.
+          - `session.created` → update `users.last_login` + SESSION_STARTED audit entry.
+        Replays (same `svix-id`) short-circuit with 200 and write no audit entry.
+        Webhook for a user whose Clerk org does not map to any `organisations.clerk_org_id`
+        is rejected with 422 and an `AUTH_FAILED` audit entry; no row is created.
+      parameters:
+        - $ref: '#/components/parameters/SvixId'
+        - $ref: '#/components/parameters/SvixTimestamp'
+        - $ref: '#/components/parameters/SvixSignature'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClerkEvent'
+      responses:
+        '200':
+          description: |
+            Event accepted. Either freshly processed OR a replay short-circuit
+            (same `svix-id` already in the ledger). Both return 200; the body
+            distinguishes them for observability only.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookAck'
+        '400':
+          description: |
+            Signature verification failed OR required svix headers missing
+            (spec FR-012, EC-004). No row touched. Failure is logged server-side.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+        '422':
+          description: |
+            Signature valid but Clerk org id does not map to any
+            `organisations.clerk_org_id`. AUTH_FAILED audit entry written.
+            Clerk SHOULD NOT retry this case; the operator must add the
+            `organisations.clerk_org_id` mapping first.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+components:
+  parameters:
+    SvixId:
+      name: svix-id
+      in: header
+      required: true
+      schema:
+        type: string
+      description: Per-delivery unique identifier. Used as `webhook_deliveries` primary key.
+    SvixTimestamp:
+      name: svix-timestamp
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^[0-9]+$'
+    SvixSignature:
+      name: svix-signature
+      in: header
+      required: true
+      schema:
+        type: string
+  schemas:
+    ClerkEvent:
+      type: object
+      required: [type, data]
+      properties:
+        type:
+          type: string
+          enum: [user.created, user.updated, session.created]
+        data:
+          type: object
+          description: Clerk event payload; shape depends on `type`.
+          additionalProperties: true
+    WebhookAck:
+      type: object
+      required: [status]
+      additionalProperties: false
+      properties:
+        status:
+          type: string
+          enum: [processed, skipped]
+          description: |
+            `processed` — handler executed.
+            `skipped`   — replay; `svix-id` already in the ledger.
+    GenericError:
+      type: object
+      required: [error]
+      additionalProperties: false
+      properties:
+        error:
+          type: string
+          enum:
+            - invalid_signature
+            - missing_headers
+            - unmapped_org

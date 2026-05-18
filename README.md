@@ -37,6 +37,19 @@ Then open:
 
 For sharing real domain types and DTOs between API and the two portals, the API will publish a generated OpenAPI client. Each portal pulls it as a regular npm dep.
 
+## Local database (Supabase)
+
+The schema lives in `supabase/migrations/` and is applied via the Supabase CLI.
+
+```bash
+brew install supabase/tap/supabase
+supabase start                # local PG + Studio on :54323
+supabase db reset             # apply every migration cleanly
+```
+
+Feature 001 (Staff Authentication) further requires a Clerk dev instance and the
+`organisations.clerk_org_id` mapping seeded — see `specs/001-staff-auth/quickstart.md`.
+
 ## Constitution
 
 Governance lives in `.specify/memory/constitution.md`. Read it before changing the stack, the gate list, or any non-negotiable principle.
